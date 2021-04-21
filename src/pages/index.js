@@ -1,10 +1,9 @@
 import React from "react";
 import { Container, makeStyles } from "@material-ui/core";
-import { useTeamDispatch, fetchTeams } from "./contexts/team";
-import { useRosterState } from "./contexts/roster";
-import TopBar from "./components/TopBar";
-import RosterItemCatagories from "./components/RosterItemCategories";
-import SetupWizard from "./components/SetupWizard";
+import { useTeamDispatch, fetchTeams } from "../contexts/team";
+import { useRosterState } from "../contexts/roster";
+import RosterItemCatagories from "../components/RosterItemCategories";
+import SetupWizard from "../components/SetupWizard";
 
 const useStyles = makeStyles((theme) => ({
     outerContainer: {
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const App = () => {
+function HomePage() {
     const classes = useStyles();
 
     const { initialized } = useRosterState();
@@ -42,15 +41,12 @@ const App = () => {
     }, [teamDispatch]);
 
     return (
-        <>
-            <TopBar />
-            <Container classes={{ root: classes.outerContainer }}>
-                <Container classes={{ root: classes.innerContainer }}>
-                    {initialized ? <RosterItemCatagories /> : <SetupWizard />}
-                </Container>
+        <Container classes={{ root: classes.outerContainer }}>
+            <Container classes={{ root: classes.innerContainer }}>
+                {initialized ? <RosterItemCatagories /> : <SetupWizard />}
             </Container>
-        </>
+        </Container>
     );
-};
+}
 
-export default App;
+export default HomePage;
