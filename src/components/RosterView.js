@@ -10,10 +10,8 @@ import {
     TableRow,
     TableCell,
     Divider,
-    IconButton,
     makeStyles,
 } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
 import { useRosterState } from "../contexts/roster";
 import * as Formatters from "../helpers/formatters";
 

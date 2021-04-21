@@ -3,6 +3,7 @@ import UUID from "../helpers/uuid";
 import UpdatePlayer from "../helpers/playerValuation";
 import PlayerStatsUpdate from "../helpers/playerStatsUpdate";
 import LOCAL from "../helpers/local";
+import { database } from "../services/fire";
 
 // Contexts
 const initialState = {
@@ -527,10 +528,27 @@ function rosterValuation(roster) {
 }
 function save(leagueMode, roster) {
     if (leagueMode) {
-        console.log("saving to server...");
+        database
+            .collection("rosters2")
+            .doc(roster.uuid)
+            .set(roster, { merge: true })
+            .then(() => {
+                LOCAL.set(roster.uuid, roster);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     } else {
         LOCAL.set(roster.uuid, roster);
     }
+}
+async function getRosters() {
+    const rostersSnapshot = await database.collection("rosters2").get().then();
+    const rosters = rostersSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+    return rosters;
 }
 
 export {
@@ -556,4 +574,5 @@ export {
     updateTreasury,
     addItem,
     removeItem,
+    getRosters,
 };
