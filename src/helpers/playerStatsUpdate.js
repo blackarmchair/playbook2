@@ -113,7 +113,9 @@ export default function PlayerStatsUpdate(player, stat) {
 
     return {
         ...player,
-        SPP: playerHasSPP ? player.SPP + stat.SPP : stat.SPP,
+        SPP: playerHasSPP
+            ? parseInt(player.SPP) + parseInt(stat.SPP)
+            : parseInt(stat.SPP),
         stats: {
             ...currentStats,
             [stat.name]: parseInt(currentStats[stat.name]) + 1,

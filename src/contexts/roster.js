@@ -42,6 +42,7 @@ function rosterReducer(state, action) {
             const newState = {
                 ...state,
                 initialized: !state.initialized,
+                owner: LOCAL.read("user").uid,
             };
             save(state.leagueMode, newState);
             return newState;
@@ -299,9 +300,9 @@ function rosterReducer(state, action) {
                 ...state,
                 record: {
                     ...state.record,
-                    win: state.record.win + 1,
+                    win: parseInt(state.record.win) + 1,
                 },
-                leaguePoints: state.leaguePoints + 3,
+                leaguePoints: parseInt(state.leaguePoints) + 3,
             };
             save(state.leagueMode, newState);
             return newState;
@@ -311,7 +312,7 @@ function rosterReducer(state, action) {
                 ...state,
                 record: {
                     ...state.record,
-                    loss: state.record.loss + 1,
+                    loss: parseInt(state.record.loss) + 1,
                 },
             };
             save(state.leagueMode, newState);
@@ -322,9 +323,9 @@ function rosterReducer(state, action) {
                 ...state,
                 record: {
                     ...state.record,
-                    draw: state.record.draw + 1,
+                    draw: parseInt(state.record.draw) + 1,
                 },
-                leaguePoints: state.leaguePoints + 1,
+                leaguePoints: parseInt(state.leaguePoints) + 1,
             };
             save(state.leagueMode, newState);
             return newState;
@@ -532,14 +533,9 @@ function save(leagueMode, roster) {
             .collection("rosters2")
             .doc(roster.uuid)
             .set(roster, { merge: true })
-            .then(() => {
-                LOCAL.set(roster.uuid, roster);
-            })
             .catch((err) => {
                 console.error(err);
             });
-    } else {
-        LOCAL.set(roster.uuid, roster);
     }
 }
 async function getRosters() {

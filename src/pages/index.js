@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useReducer } from "react";
 import { Container, makeStyles } from "@material-ui/core";
 import { useTeamDispatch, fetchTeams } from "../contexts/team";
-import { useRosterState } from "../contexts/roster";
-import RosterItemCatagories from "../components/RosterItemCategories";
-import SetupWizard from "../components/SetupWizard";
+import { useUserDispatch, getUserData, userReducer } from "../contexts/user";
+import HomePageComponent from "../components/HomePage";
 
 const useStyles = makeStyles((theme) => ({
     outerContainer: {
@@ -34,17 +33,19 @@ const useStyles = makeStyles((theme) => ({
 function HomePage() {
     const classes = useStyles();
 
-    const { initialized } = useRosterState();
     const teamDispatch = useTeamDispatch();
+    const userDispatch = useUserDispatch();
     React.useEffect(() => {
         fetchTeams(teamDispatch);
-    }, [teamDispatch]);
+        getUserData(userDispatch, localStorage.getItem("userId"));
+    }, [teamDispatch, userDispatch]);
+
+    const [user, dispatch] = useReducer(userReducer);
 
     return (
         <Container classes={{ root: classes.outerContainer }}>
-            <Container classes={{ root: classes.innerContainer }}>
-                {initialized ? <RosterItemCatagories /> : <SetupWizard />}
-            </Container>
+            <HomePageComponent />
+            <pre>{JSON.stringify(user, null, 2)}</pre>
         </Container>
     );
 }

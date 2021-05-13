@@ -213,7 +213,7 @@ const RosterView = (props) => {
                 Team Value: {Formatters.parseNumber(value)}g
             </Typography>
             <Typography variant="body2">
-                Fan Factor: {dedicatedFans + 1}
+                Fan Factor: {parseInt(dedicatedFans)}
             </Typography>
             {leagueMode && (
                 <Typography variant="body2">
