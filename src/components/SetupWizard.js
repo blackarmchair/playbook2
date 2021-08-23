@@ -68,7 +68,7 @@ const SetupWizard = () => {
 	};
 
 	// League Mode
-	const [leagueMode, setLeagueModeChecked] = React.useState(false);
+	const [leagueMode, setLeagueModeChecked] = React.useState(true);
 	const toggleLeagueMode = () => {
 		setLeagueMode(dispatch, !leagueMode);
 		setLeagueModeChecked(!leagueMode);
@@ -125,6 +125,7 @@ const SetupWizard = () => {
 					label="Team Value(g)"
 					variant="outlined"
 					defaultValue={Formatters.parseNumber(1000000)}
+					disabled
 				/>
 			),
 		},
@@ -147,6 +148,7 @@ const SetupWizard = () => {
 								onChange={toggleLeagueMode}
 								name="leagueMode"
 								color="primary"
+								disabled
 							/>
 						}
 						label="League Mode"
