@@ -97,7 +97,7 @@ function RostersPage() {
 		<Container classes={{ root: classes.outerContainer }}>
 			<Container classes={{ root: classes.innerContainer }}>
 				<List>
-					{user.id &&
+					{(user.id || user.uid) &&
 						rosters.map((roster) => (
 							<div key={roster.uuid}>
 								<ListItem>
