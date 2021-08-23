@@ -93,11 +93,13 @@ function RostersPage() {
 		}
 	};
 
+	const userLoaded = user && (user.id || user.uid);
+
 	return (
 		<Container classes={{ root: classes.outerContainer }}>
 			<Container classes={{ root: classes.innerContainer }}>
 				<List>
-					{(user.id || user.uid) &&
+					{userLoaded &&
 						rosters.map((roster) => (
 							<div key={roster.uuid}>
 								<ListItem>
