@@ -20,7 +20,7 @@ const initialState = {
 	teamId: '',
 	teamName: '',
 	teamLabel: 'The No-Named Fools',
-	leagueMode: false,
+	leagueMode: true,
 	initialized: false,
 	record: {
 		win: 0,
@@ -44,7 +44,7 @@ function rosterReducer(state, action) {
 				initialized: !state.initialized,
 				owner: LOCAL.read('user').uid,
 			};
-			save(true, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/SET_ROSTER': {
@@ -70,12 +70,6 @@ function rosterReducer(state, action) {
 		}
 		case 'ROSTER/LOAD': {
 			return { ...action.roster };
-		}
-		case 'ROSTER/SET_LEAGUE_MODE': {
-			return {
-				...state,
-				leagueMode: action.leagueMode,
-			};
 		}
 		case 'ROSTER/SET_MAX_VALUE': {
 			return {
@@ -121,9 +115,9 @@ function rosterReducer(state, action) {
 							nigglingInjuries: 0,
 						},
 					],
-					treasury: state.leagueMode ? newTreasury : state.treasury,
+					treasury: newTreasury,
 				};
-				save(state.leagueMode, {
+				save({
 					...newState,
 					value: rosterValuation(newState),
 				});
@@ -141,11 +135,9 @@ function rosterReducer(state, action) {
 				players: state.players.filter(
 					(player) => player.uuid !== action.player.uuid
 				),
-				treasury: state.leagueMode
-					? parseInt(state.treasury) + parseInt(action.player.cost)
-					: parseInt(state.treasury),
+				treasury: parseInt(state.treasury) + parseInt(action.player.cost),
 			};
-			save(state.leagueMode, {
+			save({
 				...newState,
 				value: rosterValuation(newState),
 			});
@@ -170,9 +162,9 @@ function rosterReducer(state, action) {
 						}
 						return item;
 					}),
-					treasury: state.leagueMode ? newTreasury : state.treasury,
+					treasury: newTreasury,
 				};
-				save(state.leagueMode, {
+				save({
 					...newState,
 					value: rosterValuation(newState),
 				});
@@ -199,7 +191,7 @@ function rosterReducer(state, action) {
 				}),
 				treasury: parseInt(state.treasury) + parseInt(action.item.value),
 			};
-			save(state.leagueMode, {
+			save({
 				...newState,
 				value: rosterValuation(newState),
 			});
@@ -219,7 +211,7 @@ function rosterReducer(state, action) {
 					return player;
 				}),
 			};
-			save(state.leagueMode, {
+			save({
 				...newState,
 				value: rosterValuation(newState),
 			});
@@ -239,7 +231,7 @@ function rosterReducer(state, action) {
 					return player;
 				}),
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/SET_PLAYER_NAME': {
@@ -252,7 +244,7 @@ function rosterReducer(state, action) {
 					return player;
 				}),
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/SET_PLAYER_NUMBER': {
@@ -265,7 +257,7 @@ function rosterReducer(state, action) {
 					return player;
 				}),
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/SET_PLAYER_INJURY_STATUS': {
@@ -282,7 +274,7 @@ function rosterReducer(state, action) {
 					return player;
 				}),
 			};
-			save(state.leagueMode, {
+			save({
 				...newState,
 				value: rosterValuation(newState),
 			});
@@ -300,7 +292,7 @@ function rosterReducer(state, action) {
 				},
 				leaguePoints: parseInt(state.leaguePoints) + 3,
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/ADD_LOSS': {
@@ -311,7 +303,7 @@ function rosterReducer(state, action) {
 					loss: parseInt(state.record.loss) + 1,
 				},
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/ADD_DRAW': {
@@ -323,7 +315,7 @@ function rosterReducer(state, action) {
 				},
 				leaguePoints: parseInt(state.leaguePoints) + 1,
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		case 'ROSTER/UPDATE_TREASURY': {
@@ -331,7 +323,7 @@ function rosterReducer(state, action) {
 				...state,
 				treasury: parseInt(action.treasury),
 			};
-			save(state.leagueMode, newState);
+			save(newState);
 			return newState;
 		}
 		default: {
@@ -399,13 +391,6 @@ function initializeRoster(dispatch) {
 function loadRoster(dispatch, roster) {
 	try {
 		dispatch({ type: 'ROSTER/LOAD', roster });
-	} catch (e) {
-		dispatch({ type: 'ROSTER/ERROR' });
-	}
-}
-function setLeagueMode(dispatch, leagueMode) {
-	try {
-		dispatch({ type: 'ROSTER/SET_LEAGUE_MODE', leagueMode });
 	} catch (e) {
 		dispatch({ type: 'ROSTER/ERROR' });
 	}
@@ -521,16 +506,14 @@ function rosterValuation(roster) {
 
 	return playerValue + miscValue;
 }
-function save(leagueMode, roster) {
-	if (leagueMode) {
-		database
-			.collection('rosters2')
-			.doc(roster.uuid)
-			.set(roster, { merge: true })
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+function save(roster) {
+	database
+		.collection('rosters2')
+		.doc(roster.uuid)
+		.set(roster, { merge: true })
+		.catch((err) => {
+			console.error(err);
+		});
 }
 async function getRosters() {
 	const rostersSnapshot = await database.collection('rosters2').get().then();
@@ -548,7 +531,6 @@ export {
 	initializeRoster,
 	setRoster,
 	loadRoster,
-	setLeagueMode,
 	setMaxValue,
 	setTeamLabel,
 	addPlayer,

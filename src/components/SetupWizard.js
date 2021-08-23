@@ -10,8 +10,6 @@ import {
 	Menu,
 	MenuItem,
 	Typography,
-	FormControlLabel,
-	Switch,
 	makeStyles,
 } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
@@ -22,7 +20,6 @@ import {
 	setRoster,
 	setMaxValue,
 	setTeamLabel,
-	setLeagueMode,
 	initializeRoster,
 } from '../contexts/roster';
 import * as Formatters from '../helpers/formatters';
@@ -65,13 +62,6 @@ const SetupWizard = () => {
 	};
 	const handleSetTeamLavel = (event) => {
 		setTeamLabel(dispatch, event.target.value);
-	};
-
-	// League Mode
-	const [leagueMode, setLeagueModeChecked] = React.useState(true);
-	const toggleLeagueMode = () => {
-		setLeagueMode(dispatch, !leagueMode);
-		setLeagueModeChecked(!leagueMode);
 	};
 
 	// Handle Stepper State
@@ -140,18 +130,6 @@ const SetupWizard = () => {
 						label="Team Name"
 						variant="outlined"
 						defaultValue="The No-Name Fools"
-					/>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={leagueMode}
-								onChange={toggleLeagueMode}
-								name="leagueMode"
-								color="primary"
-								disabled
-							/>
-						}
-						label="League Mode"
 					/>
 				</>
 			),
