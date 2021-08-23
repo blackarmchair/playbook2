@@ -93,7 +93,7 @@ function RostersPage() {
 		}
 	};
 
-	const userLoaded = user && (user.id || user.uid);
+	const userLoaded = !!user && (user.id || user.uid);
 
 	return (
 		<Container classes={{ root: classes.outerContainer }}>
