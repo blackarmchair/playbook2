@@ -92,7 +92,7 @@ function RostersPage() {
 			router.push(`/view/${roster.uuid}`);
 		}
 	};
-	// useless comment
+
 	return (
 		<Container classes={{ root: classes.outerContainer }}>
 			<Container classes={{ root: classes.innerContainer }}>
