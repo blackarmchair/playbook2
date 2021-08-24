@@ -13,6 +13,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { database } from '../../services/fire';
 import { LEVELS } from '../../helpers/playerStatsUpdate';
 import * as Formatters from '../../helpers/formatters';
+import LOCAL from '../../helpers/local';
 
 import NameSelect from '../ListItems/NameSelect';
 import JerseyNumberSelect from '../ListItems/JerseyNumberSelect';
@@ -43,9 +44,17 @@ const EditPlayer = (props) => {
 	React.useEffect(() => {
 		async function fetchSkills() {
 			const snapshot = await database.collection('skills').get();
-			setSkills(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+			const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+			LOCAL.set('skills', docs);
+			setSkills(docs);
 		}
-		fetchSkills();
+
+		let skills = LOCAL.read('skills') || [];
+		if (!Array.isArray(skills) || !skills.length) {
+			fetchSkills();
+		} else {
+			setSkills(skills);
+		}
 	}, []);
 	return (
 		<List className={classes.list}>

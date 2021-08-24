@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { database } from '../services/fire';
+import LOCAL from '../helpers/local';
 
 // Contexts
 const initialState = {
@@ -81,16 +82,38 @@ async function getUserData(dispatch, userId) {
 
 const getUserList = async (dispatch) => {
 	try {
-		const userListSnapshot = await database.collection('users').get();
-		const userList = userListSnapshot.map((doc) => ({
-			id: doc.id,
-			...doc.data(),
-		}));
+		let users = LOCAL.read('users') || [];
+
+		if (Array.isArray(users) && users.length) {
+			console.log('get updated users');
+			const updatedUsersSnapshot = await database
+				.collection('users')
+				.where('email', 'not-in', users)
+				.get();
+			const updatedUsersList = updatedUsersSnapshot.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
+			users = [...users, ...updatedUsersList];
+		} else {
+			console.log('get ALL users');
+			const userListSnapshot = await database.collection('users').get();
+			users = userListSnapshot.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
+		}
+
+		LOCAL.set(
+			'users',
+			users.map((user) => user.email)
+		);
+
 		dispatch({
 			type: 'USER/SET_USER_LIST',
-			userList,
+			users,
 		});
-		return userList;
+		return users;
 	} catch (e) {
 		dispatch({
 			type: 'USER/SET_USER_LIST',

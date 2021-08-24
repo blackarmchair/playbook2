@@ -510,17 +510,51 @@ function save(roster) {
 	database
 		.collection('rosters2')
 		.doc(roster.uuid)
-		.set(roster, { merge: true })
+		.set({ ...roster, lastUpdatedAt: Date.now() }, { merge: true })
 		.catch((err) => {
 			console.error(err);
 		});
 }
 async function getRosters() {
-	const rostersSnapshot = await database.collection('rosters2').get().then();
-	const rosters = rostersSnapshot.docs.map((doc) => ({
-		id: doc.id,
-		...doc.data(),
-	}));
+	// Assess current cache
+	let rosters = LOCAL.read('rosters') || [];
+	const lastFetchedRostersAt = LOCAL.read('lastFetchedRostersAt');
+
+	// Fetch Rosters with Updates
+	if (Array.isArray(rosters) && rosters.length) {
+		const updatedRostersSnapshot = await database
+			.collection('rosters2')
+			.where('lastUpdatedAt', '>', lastFetchedRostersAt)
+			.get()
+			.then();
+		const updatedRosters = updatedRostersSnapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+		updatedRosters.forEach((newRoster) => {
+			const oldRosterIdx = rosters.findIndex(
+				(roster) => roster.id === newRoster.id
+			);
+			rosters[oldRosterIdx] = newRoster;
+		});
+	}
+
+	// Fetch All Rosters
+	else {
+		const allRostersSnapshot = await database
+			.collection('rosters2')
+			.get()
+			.then();
+		rosters = allRostersSnapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+	}
+
+	// Update localstorage
+	LOCAL.set('rosters', rosters);
+	LOCAL.set('lastFetchedRostersAt', Date.now());
+
 	return rosters;
 }
 

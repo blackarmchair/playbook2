@@ -85,7 +85,7 @@ const RosterItemCatagories = () => {
 	const { teamId, items, players, teamName, teamLabel, value } =
 		useRosterState();
 
-	return (
+	return teamId ? (
 		<>
 			<SwipeableDrawer
 				anchor="right"
@@ -188,7 +188,7 @@ const RosterItemCatagories = () => {
 				</>
 			</List>
 		</>
-	);
+	) : null;
 };
 
 export default RosterItemCatagories;

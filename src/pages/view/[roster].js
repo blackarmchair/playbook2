@@ -8,7 +8,6 @@ import {
 } from '../../contexts/roster';
 import { useTeamDispatch, fetchTeams } from '../../contexts/team';
 import RosterView from '../../components/RosterView';
-import Local from '../../helpers/local';
 
 const RosterPage = () => {
 	const router = useRouter();
@@ -22,16 +21,8 @@ const RosterPage = () => {
 	React.useEffect(() => {
 		fetchTeams(teamDispatch);
 		getRosters().then((serverRosters) => {
-			const localRosters = Local.getRosters().filter((r) => {
-				const isDupe = serverRosters.find(
-					(serverRoster) => serverRoster.uuid !== r.uuid
-				);
-				return !!isDupe;
-			});
-			const fullSet = [...localRosters, ...serverRosters];
-			const rosterState = fullSet.find((r) => r.uuid === roster);
+			const rosterState = serverRosters.find((r) => r.uuid === roster);
 			if (!!rosterState) {
-				console.log(rosterState);
 				loadRoster(dispatch, rosterState);
 				setLoading(false);
 			}
