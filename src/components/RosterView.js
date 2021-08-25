@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 	table: {
 		marginTop: theme.spacing(2),
 		marginBottom: theme.spacing(2),
+		maxHeight: '75vh',
 	},
 	tableHeader: {
 		backgroundColor: theme.palette.primary.main,
@@ -114,7 +115,7 @@ const RosterView = (props) => {
 
 	const PlayerDisplayTable = ({ children }) => (
 		<TableContainer component={Paper} className={classes.table}>
-			<Table size="small">
+			<Table stickyHeader size="small">
 				<TableHead>
 					<TableRow>
 						<TableCell className={classes.tableHeader}>Name</TableCell>
