@@ -61,6 +61,9 @@ const RosterView = (props) => {
 
 	const Player = ({ player }) => (
 		<TableRow>
+			<TableCell align="right" className={classes.tableCell}>
+				#{player.number || '00'}
+			</TableCell>
 			<TableCell align="left" className={classes.tableCell}>
 				{player.name}
 			</TableCell>
@@ -118,7 +121,9 @@ const RosterView = (props) => {
 			<Table stickyHeader size="small">
 				<TableHead>
 					<TableRow>
-						<TableCell className={classes.tableHeader}>Name</TableCell>
+						<TableCell className={classes.tableHeader} colSpan={2}>
+							Name
+						</TableCell>
 						<TableCell className={classes.tableHeader}>Position</TableCell>
 						<TableCell align="right" className={classes.tableHeader}>
 							Value
