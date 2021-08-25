@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import {
 	Container,
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: theme.palette.primary.main,
 		color: theme.palette.primary.contrastText,
 	},
+	avatarColorOwnTeam: {
+		backgroundColor: theme.palette.secondary.main,
+		color: theme.palette.secondary.contrastText,
+	},
 	fab: {
 		position: 'absolute',
 		bottom: theme.spacing(2),
@@ -102,46 +107,58 @@ function RostersPage() {
 	const userLoaded = !!user && (user.id || user.uid);
 
 	return (
-		<Container classes={{ root: classes.outerContainer }}>
-			<Container classes={{ root: classes.innerContainer }}>
-				<List>
-					{userLoaded &&
-						rosters.map((roster) => (
-							<div key={roster.uuid}>
-								<ListItem>
-									<ListItemAvatar>
-										<Avatar className={classes.avatarColor} variant="square">
-											{getInitials(
-												roster?.ownerData?.fname,
-												roster?.ownerData?.lname
-											) || ''}
-										</Avatar>
-									</ListItemAvatar>
-									<ListItemText
-										primary={roster.teamLabel}
-										secondary={
-											<Typography variant="caption">
-												{`${roster.teamName} Team`}
-												<br />
-												{Formatters.parseNumber(roster.value)}g
-											</Typography>
-										}
-										onClick={() => handleNav(roster)}
-									/>
-								</ListItem>
-								<Divider />
-							</div>
-						))}
-				</List>
-				<Fab
-					color="primary"
-					onClick={() => router.push('/create')}
-					className={classes.fab}
-				>
-					<AddIcon />
-				</Fab>
+		<>
+			<Head>
+				<title>TeamDraft - Roster List</title>
+			</Head>
+			<Container classes={{ root: classes.outerContainer }}>
+				<Container classes={{ root: classes.innerContainer }}>
+					<List>
+						{userLoaded &&
+							rosters.map((roster) => (
+								<div key={roster.uuid}>
+									<ListItem>
+										<ListItemAvatar>
+											<Avatar
+												className={
+													roster.isOwn
+														? classes.avatarColorOwnTeam
+														: classes.avatarColor
+												}
+												variant="square"
+											>
+												{getInitials(
+													roster?.ownerData?.fname,
+													roster?.ownerData?.lname
+												) || ''}
+											</Avatar>
+										</ListItemAvatar>
+										<ListItemText
+											primary={roster.teamLabel}
+											secondary={
+												<Typography variant="caption">
+													{`${roster.teamName} Team`}
+													<br />
+													{Formatters.parseNumber(roster.value)}g
+												</Typography>
+											}
+											onClick={() => handleNav(roster)}
+										/>
+									</ListItem>
+									<Divider />
+								</div>
+							))}
+					</List>
+					<Fab
+						color="primary"
+						onClick={() => router.push('/create')}
+						className={classes.fab}
+					>
+						<AddIcon />
+					</Fab>
+				</Container>
 			</Container>
-		</Container>
+		</>
 	);
 }
 

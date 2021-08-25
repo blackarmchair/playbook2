@@ -1,0 +1,113 @@
+{
+    "players": ["Willie", "Elle", "Nick", "Kory", "Chris", "Alex", "Taj", "Mitch", "Tiki Jay"],
+    "weeks": [
+        {
+            "index": 1,
+            "startDate": "08/23/2021",
+            "endDate": "08/29/2021",
+            "bye": "Willie",
+            "games": [
+                [ "Elle", "Nick" ],
+                [ "Kory", "Chris"],
+                [ "Alex", "Taj"],
+                [ "Mitch", "Tiki Jay"]
+            ]
+        },
+        {
+            "index": 2,
+            "startDate": "08/30/2021",
+            "endDate": "09/05/2021",
+            "bye": "Nick",
+            "games": [
+                [ "Willie","Chris" ],
+                [ "Elle","Taj" ],
+                [ "Kory","Tiki Jay" ],
+                [ "Alex","Mitch" ]
+            ]
+        },
+        {
+            "index": 3,
+            "startDate": "09/06/2021",
+            "endDate": "09/12/2021",
+            "bye": "Chris",
+            "games": [
+                [ "Willie","Tiki Jay" ],
+                [ "Elle","Mitch" ],
+                [ "Kory","Alex" ],
+                [ "Nick","Taj" ]
+            ]
+        },
+        {
+            "index": 4,
+            "startDate": "09/13/2021",
+            "endDate": "09/19/2021",
+            "bye": "Taj",
+            "games": [
+                [ "Willie","Alex" ],
+                [ "Elle","Kory" ],
+                [ "Mitch","Nick" ],
+                [ "Tiki Jay","Chris" ]
+            ]
+        },
+        {
+            "index": 5,
+            "startDate": "09/20/2021",
+            "endDate": "09/26/2021",
+            "bye": "Tiki Jay",
+            "games": [
+                [ "Willie","Elle" ],
+                [ "Nick","Kory" ],
+                [ "Alex","Chris" ],
+                [ "Taj","Mitch" ]
+            ]
+        },
+        {
+            "index": 6,
+            "startDate": "09/27/2021",
+            "endDate": "10/03/2021",
+            "bye": "Mitch",
+            "games": [
+                [ "Willie","Nick" ],
+                [ "Elle","Chris" ],
+                [ "Kory","Taj" ],
+                [ "Tiki Jay","Alex" ]
+            ]
+        },
+        {
+            "index": 7,
+            "startDate": "10/04/2021",
+            "endDate": "10/10/2021",
+            "bye": "Alex",
+            "games": [
+                [ "Willie","Taj" ],
+                [ "Elle","Tiki Jay" ],
+                [ "Kory","Mitch" ],
+                [ "Nick","Chris" ]
+            ]
+        },
+        {
+            "index": 8,
+            "startDate": "10/11/2021",
+            "endDate": "10/17/2021",
+            "bye": "Kory",
+            "games": [
+                [ "Willie","Mitch" ],
+                [ "Elle","Alex" ],
+                [ "Nick","Tiki Jay" ],
+                [ "Chris","Taj" ]
+            ]
+        },
+        {
+            "index": 9,
+            "startDate": "10/18/2021",
+            "endDate": "10/24/2021",
+            "bye": "Elle",
+            "games": [
+                [ "Willie","Kory" ],
+                [ "Nick","Alex" ],
+                [ "Taj","Tiki Jay" ],
+                [ "Chris","Mitch" ]
+            ]
+        }
+    ]
+}

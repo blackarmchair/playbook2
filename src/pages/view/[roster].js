@@ -1,6 +1,7 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { CircularProgress } from '@material-ui/core';
 import {
 	useRosterDispatch,
 	loadRoster,
@@ -29,7 +30,14 @@ const RosterPage = () => {
 		});
 	}, [dispatch, teamDispatch, roster, router]);
 
-	return !loading ? <RosterView /> : <CircularProgress />;
+	return (
+		<>
+			<Head>
+				<title>TeamDraft - View Roster</title>
+			</Head>
+			{!loading ? <RosterView /> : <CircularProgress />}
+		</>
+	);
 };
 
 export default RosterPage;

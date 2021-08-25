@@ -1,9 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { Container, makeStyles } from '@material-ui/core';
-import { useTeamDispatch, fetchTeams } from '../contexts/team';
-import { useUserDispatch, getUserData } from '../contexts/user';
-import HomePageComponent from '../components/HomePage';
+import Schedule from '../components/Schedule';
 
 const useStyles = makeStyles((theme) => ({
 	outerContainer: {
@@ -34,20 +32,13 @@ const useStyles = makeStyles((theme) => ({
 function HomePage() {
 	const classes = useStyles();
 
-	const teamDispatch = useTeamDispatch();
-	const userDispatch = useUserDispatch();
-	React.useEffect(() => {
-		fetchTeams(teamDispatch);
-		getUserData(userDispatch, localStorage.getItem('userId'));
-	}, [teamDispatch, userDispatch]);
-
 	return (
 		<>
 			<Head>
-				<title>TeamDraft</title>
+				<title>TeamDraft - Schedule</title>
 			</Head>
 			<Container classes={{ root: classes.outerContainer }}>
-				<HomePageComponent />
+				<Schedule />
 			</Container>
 		</>
 	);

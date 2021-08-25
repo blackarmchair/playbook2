@@ -15,8 +15,8 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 
 const useStyles = makeStyles((theme) => ({
 	drawer: {
@@ -88,17 +88,17 @@ const TopBar = () => {
 				</div>
 				<Divider />
 				<List>
-					<ListItem button onClick={() => handleNavigation('/create')}>
-						<ListItemIcon>
-							<NoteAddIcon />
-						</ListItemIcon>
-						<ListItemText primary="Create Roster" />
-					</ListItem>
 					<ListItem button onClick={() => handleNavigation('/rosterList')}>
 						<ListItemIcon>
 							<VisibilityIcon />
 						</ListItemIcon>
-						<ListItemText primary="View Roster" />
+						<ListItemText primary="Teams" />
+					</ListItem>
+					<ListItem button onClick={() => handleNavigation('/schedule')}>
+						<ListItemIcon>
+							<DateRangeIcon />
+						</ListItemIcon>
+						<ListItemText primary="Schedule" />
 					</ListItem>
 				</List>
 			</Drawer>
