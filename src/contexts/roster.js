@@ -30,7 +30,7 @@ const initialState = {
 	treasury: 1000000,
 	leaguePoints: 0,
 	uuid: UUID(),
-	dateCreated: new Date().getTime(),
+	lastUpdatedAt: new Date().getTime(),
 };
 const RosterStateContext = React.createContext(initialState);
 const RosterDispatchContext = React.createContext(initialState);
@@ -41,7 +41,7 @@ function rosterReducer(state, action) {
 		case 'ROSTER/INITIALIZE': {
 			const newState = {
 				...state,
-				initialized: !state.initialized,
+				initialized: true,
 				owner: LOCAL.read('user').uid,
 			};
 			save(newState);

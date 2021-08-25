@@ -16,9 +16,10 @@ import AddIcon from '@material-ui/icons/Add';
 import * as Formatters from '../helpers/formatters';
 import withAuth from '../helpers/withAuth';
 import { useTeamDispatch, fetchTeams } from '../contexts/team';
-import { useUserDispatch, getUserData } from '../contexts/user';
+import { useUserDispatch, getUserData, getUserList } from '../contexts/user';
 import { getRosters } from '../contexts/roster';
 import { getInitials } from '../helpers/formatters';
+import LOCAL from '../helpers/local';
 
 const useStyles = makeStyles((theme) => ({
 	outerContainer: {
@@ -75,14 +76,19 @@ function RostersPage() {
 			setUser(userData);
 		});
 		fetchTeams(teamDispatch);
-		getRosters().then((serverRosters) => {
-			const parsedRosters = serverRosters.map((roster) => ({
-				...roster,
-				isOwn:
-					roster.hasOwnProperty('owner') && !roster.owner.localeCompare(userId),
-			}));
-			setRosters(parsedRosters);
-		});
+		getUserList(userDispatch)
+			.then(getRosters)
+			.then((serverRosters) => {
+				const users = LOCAL.read('users') || [];
+				const parsedRosters = serverRosters.map((roster) => ({
+					...roster,
+					isOwn:
+						roster.hasOwnProperty('owner') &&
+						!roster.owner.localeCompare(userId),
+					ownerData: users.find((user) => user.id === roster.owner),
+				}));
+				setRosters(parsedRosters);
+			});
 	}, [teamDispatch, userDispatch]);
 
 	const handleNav = (roster) => {
@@ -105,7 +111,10 @@ function RostersPage() {
 								<ListItem>
 									<ListItemAvatar>
 										<Avatar className={classes.avatarColor} variant="square">
-											{roster.isOwn ? getInitials(user.fname, user.lname) : ''}
+											{getInitials(
+												roster?.ownerData?.fname,
+												roster?.ownerData?.lname
+											) || ''}
 										</Avatar>
 									</ListItemAvatar>
 									<ListItemText

@@ -85,29 +85,28 @@ const getUserList = async (dispatch) => {
 		let users = LOCAL.read('users') || [];
 
 		if (Array.isArray(users) && users.length) {
-			console.log('get updated users');
 			const updatedUsersSnapshot = await database
 				.collection('users')
-				.where('email', 'not-in', users)
+				.where(
+					'email',
+					'not-in',
+					users.map((u) => u.email)
+				)
 				.get();
-			const updatedUsersList = updatedUsersSnapshot.map((doc) => ({
+			const updatedUsersList = updatedUsersSnapshot.docs.map((doc) => ({
 				id: doc.id,
 				...doc.data(),
 			}));
 			users = [...users, ...updatedUsersList];
 		} else {
-			console.log('get ALL users');
 			const userListSnapshot = await database.collection('users').get();
-			users = userListSnapshot.map((doc) => ({
+			users = userListSnapshot.docs.map((doc) => ({
 				id: doc.id,
 				...doc.data(),
 			}));
 		}
 
-		LOCAL.set(
-			'users',
-			users.map((user) => user.email)
-		);
+		LOCAL.set('users', users);
 
 		dispatch({
 			type: 'USER/SET_USER_LIST',

@@ -64,7 +64,12 @@ const TopBar = () => {
 					<IconButton onClick={handleDrawerOpen} color="inherit">
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6">TeamDraft</Typography>
+					<Typography
+						variant="h6"
+						onClick={() => handleNavigation('/rosterList')}
+					>
+						TeamDraft
+					</Typography>
 				</Toolbar>
 			</AppBar>
 			<Drawer

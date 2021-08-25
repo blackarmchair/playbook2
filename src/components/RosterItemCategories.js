@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import {
 	SwipeableDrawer,
 	IconButton,
@@ -11,12 +12,8 @@ import {
 	makeStyles,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import {
-	useRosterState,
-	initializeRoster,
-	useRosterDispatch,
-} from '../contexts/roster';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { useRosterState } from '../contexts/roster';
 import * as Formatters from '../helpers/formatters';
 import * as Sorters from '../helpers/sorters';
 import PlayerList from './Overlays/PlayerList';
@@ -68,7 +65,7 @@ const CATEGORIES = {
 
 const RosterItemCatagories = () => {
 	const classes = useStyles();
-	const dispatch = useRosterDispatch();
+	const router = useRouter();
 
 	const [open, setOpen] = React.useState(false);
 	const [category, setCategory] = React.useState('');
@@ -82,7 +79,7 @@ const RosterItemCatagories = () => {
 		}
 	};
 
-	const { teamId, items, players, teamName, teamLabel, value } =
+	const { teamId, items, players, teamName, teamLabel, value, uuid } =
 		useRosterState();
 
 	return teamId ? (
@@ -109,8 +106,8 @@ const RosterItemCatagories = () => {
 						classes={{ secondary: classes.secondaryContrast }}
 					/>
 					<ListItemSecondaryAction>
-						<IconButton onClick={() => initializeRoster(dispatch)}>
-							<EditIcon className={classes.icon} />
+						<IconButton onClick={() => router.push(`/view/${uuid}`)}>
+							<VisibilityIcon className={classes.icon} />
 						</IconButton>
 					</ListItemSecondaryAction>
 				</ListItem>
