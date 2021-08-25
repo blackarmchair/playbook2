@@ -500,8 +500,12 @@ function rosterValuation(roster) {
 		? roster.players.reduce((acc, player) => player.cost + acc, 0)
 		: 0;
 	const miscValue = Object.keys(roster.items).reduce((acc, key) => {
-		const item = roster.items[key];
-		return item.qty * item.value + acc;
+		if (roster.items[key] === 'Dedicated Fans') {
+			return acc;
+		} else {
+			const item = roster.items[key];
+			return item.qty * item.value + acc;
+		}
 	}, 0);
 
 	return playerValue + miscValue;

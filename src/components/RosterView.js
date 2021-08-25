@@ -52,10 +52,10 @@ const RosterView = (props) => {
 		treasury,
 		record,
 	} = useRosterState();
+
 	const dedicatedFans = !!items
-		? Object.keys(items).find((key) => items[key].label === 'Dedicated Fans') ||
-		  0
-		: 0;
+		? items.find((item) => item.label === 'Dedicated Fans').qty + 1
+		: 1;
 
 	if (!initialized) return null;
 
