@@ -17,6 +17,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import LOCAL from '../helpers/local';
 
 const useStyles = makeStyles((theme) => ({
 	drawer: {
@@ -55,6 +57,11 @@ const TopBar = () => {
 	const handleNavigation = (path) => {
 		handleDrawerClose();
 		router.push(path);
+	};
+
+	const handleLogout = () => {
+		LOCAL.clear();
+		handleNavigation('/signin');
 	};
 
 	return (
@@ -99,6 +106,12 @@ const TopBar = () => {
 							<DateRangeIcon />
 						</ListItemIcon>
 						<ListItemText primary="Schedule" />
+					</ListItem>
+					<ListItem button onClick={() => handleLogout()}>
+						<ListItemIcon>
+							<ExitToAppIcon />
+						</ListItemIcon>
+						<ListItemText primary="Logout" />
 					</ListItem>
 				</List>
 			</Drawer>
