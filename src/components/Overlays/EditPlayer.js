@@ -56,6 +56,7 @@ const EditPlayer = (props) => {
 			setSkills(skills);
 		}
 	}, []);
+
 	return (
 		<List className={classes.list}>
 			<AppBar position="sticky">
@@ -84,17 +85,15 @@ const EditPlayer = (props) => {
 				/>
 			</ListItem>
 
-			{/* Starting Skills */}
+			{/* Skills */}
 			<ListItem className={classes.listItem}>
-				<ListItemText primary="Starting Skills" />
+				<ListItemText primary="Skills" />
 			</ListItem>
-			{skills
-				.filter((skill) => props.player.skills.split(',').includes(skill.name))
-				.map((skill) => (
-					<ListItem key={skill.name}>
-						<ListItemText primary={skill.name} />
-					</ListItem>
-				))}
+			{props.player.skills.split(',').map((skill) => (
+				<ListItem key={skill}>
+					<ListItemText primary={skill} />
+				</ListItem>
+			))}
 
 			{/* Stats and Star Player Points */}
 			<>

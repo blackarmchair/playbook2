@@ -31,6 +31,7 @@ const initialState = {
 	leaguePoints: 0,
 	uuid: UUID(),
 	lastUpdatedAt: new Date().getTime(),
+	leagueHasStarted: false,
 };
 const RosterStateContext = React.createContext(initialState);
 const RosterDispatchContext = React.createContext(initialState);
@@ -130,12 +131,18 @@ function rosterReducer(state, action) {
 			}
 		}
 		case 'ROSTER/REMOVE_PLAYER': {
+			let newTreasury = 0;
+			if (state.leagueHasStarted) {
+				newTreasury = parseInt(state.treasury);
+			} else {
+				newTreasury = parseInt(state.treasury) + parseInt(action.player.cost);
+			}
 			const newState = {
 				...state,
 				players: state.players.filter(
 					(player) => player.uuid !== action.player.uuid
 				),
-				treasury: parseInt(state.treasury) + parseInt(action.player.cost),
+				treasury: newTreasury,
 			};
 			save({
 				...newState,
@@ -147,8 +154,12 @@ function rosterReducer(state, action) {
 			};
 		}
 		case 'ROSTER/ADD_ITEM': {
-			const newTreasury =
-				parseInt(state.treasury) - parseInt(action.item.value);
+			let newTreasury = 0;
+			if (state.leagueHasStarted && action.item.label === 'Dedicated Fans') {
+				newTreasury = parseInt(state.treasury);
+			} else {
+				newTreasury = parseInt(state.treasury) - parseInt(action.item.value);
+			}
 			if (newTreasury >= 0) {
 				const newState = {
 					...state,
@@ -177,6 +188,12 @@ function rosterReducer(state, action) {
 			}
 		}
 		case 'ROSTER/REMOVE_ITEM': {
+			let newTreasury = 0;
+			if (state.leagueHasStarted && action.item.label === 'Dedicated Fans') {
+				newTreasury = parseInt(state.treasury);
+			} else {
+				newTreasury = parseInt(state.treasury) + parseInt(action.item.value);
+			}
 			const newState = {
 				...state,
 				items: Object.keys(state.items).map((key) => {
@@ -189,7 +206,7 @@ function rosterReducer(state, action) {
 					}
 					return item;
 				}),
-				treasury: parseInt(state.treasury) + parseInt(action.item.value),
+				treasury: newTreasury,
 			};
 			save({
 				...newState,
@@ -500,7 +517,7 @@ function rosterValuation(roster) {
 		? roster.players.reduce((acc, player) => player.cost + acc, 0)
 		: 0;
 	const miscValue = Object.keys(roster.items).reduce((acc, key) => {
-		if (roster.items[key] === 'Dedicated Fans') {
+		if (roster.items[key].label === 'Dedicated Fans') {
 			return acc;
 		} else {
 			const item = roster.items[key];

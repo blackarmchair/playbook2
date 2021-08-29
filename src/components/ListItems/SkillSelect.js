@@ -95,13 +95,17 @@ const SkillSelect = ({ level, label, skills, player }) => {
 				}`
 			];
 
-		updatePlayer(dispatch, player, {
-			...skill,
-			cost,
-			level,
-			sppCost,
-		});
-		toggleDrawer();
+		if (player.SPP >= sppCost) {
+			updatePlayer(dispatch, player, {
+				...skill,
+				cost,
+				level,
+				sppCost,
+			});
+			toggleDrawer();
+		} else {
+			alert("You don't have enough SPP");
+		}
 	};
 
 	// Skill Display

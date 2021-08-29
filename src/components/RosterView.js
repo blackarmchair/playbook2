@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { useRosterState } from '../contexts/roster';
 import * as Formatters from '../helpers/formatters';
+import { LEVELS } from '../helpers/playerStatsUpdate';
 
 const useStyles = makeStyles((theme) => ({
 	drawer: {
@@ -68,7 +69,11 @@ const RosterView = (props) => {
 				{player.name}
 			</TableCell>
 			<TableCell align="left" className={classes.tableCell}>
+				{player.level >= 0 ? LEVELS[player.level].label : 'Novice'}{' '}
 				{player.position}
+			</TableCell>
+			<TableCell align="left" className={classes.tableCell}>
+				{player.SPP}
 			</TableCell>
 			<TableCell align="right" className={classes.tableCell}>
 				{Formatters.parseNumber(player.cost)}g
@@ -125,6 +130,7 @@ const RosterView = (props) => {
 							Name
 						</TableCell>
 						<TableCell className={classes.tableHeader}>Position</TableCell>
+						<TableCell className={classes.tableHeader}>SPP</TableCell>
 						<TableCell align="right" className={classes.tableHeader}>
 							Value
 						</TableCell>

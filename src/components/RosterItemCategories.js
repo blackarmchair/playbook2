@@ -79,8 +79,16 @@ const RosterItemCatagories = () => {
 		}
 	};
 
-	const { teamId, items, players, teamName, teamLabel, value, uuid } =
-		useRosterState();
+	const {
+		teamId,
+		items,
+		players,
+		teamName,
+		teamLabel,
+		value,
+		uuid,
+		leagueHasStarted,
+	} = useRosterState();
 
 	return teamId ? (
 		<>
@@ -164,6 +172,7 @@ const RosterItemCatagories = () => {
 						item={items[key]}
 						toggleDrawer={() => toggleDrawer(CATEGORIES.ITEM)}
 						key={key}
+						leagueHasStarted={leagueHasStarted}
 					/>
 				))}
 
