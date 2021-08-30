@@ -32,6 +32,7 @@ const initialState = {
 	uuid: UUID(),
 	lastUpdatedAt: new Date().getTime(),
 	leagueHasStarted: false,
+	lowCostLinemen: false,
 };
 const RosterStateContext = React.createContext(initialState);
 const RosterDispatchContext = React.createContext(initialState);
@@ -514,7 +515,10 @@ function updateTreasury(dispatch, treasury) {
 // Business Logic
 function rosterValuation(roster) {
 	const playerValue = Array.isArray(roster.players)
-		? roster.players.reduce((acc, player) => player.cost + acc, 0)
+		? roster.players.reduce((acc, player) => {
+				if (roster.lowCostLinemen && player.max >= 12) return acc;
+				return player.cost + acc;
+		  }, 0)
 		: 0;
 	const miscValue = Object.keys(roster.items).reduce((acc, key) => {
 		if (roster.items[key].label === 'Dedicated Fans') {
