@@ -517,6 +517,7 @@ function rosterValuation(roster) {
 	const playerValue = Array.isArray(roster.players)
 		? roster.players.reduce((acc, player) => {
 				if (roster.lowCostLinemen && player.max >= 12) return acc;
+				if (player.missNextGame) return acc;
 				return player.cost + acc;
 		  }, 0)
 		: 0;
