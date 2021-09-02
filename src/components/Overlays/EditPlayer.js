@@ -21,6 +21,7 @@ import SkillSelect from '../ListItems/SkillSelect';
 import PlayerInjuryHistory from '../ListItems/PlayerInjuryHistory';
 import Stats from '../ListItems/spp';
 import FirePlayer from '../ListItems/FirePlayer';
+import KillPlayer from '../ListItems/KillPlayer';
 
 const useStyles = makeStyles((theme) => ({
 	headline: { flexGrow: 1 },
@@ -128,6 +129,7 @@ const EditPlayer = (props) => {
 				<ListItemText primary="Injury History" />
 			</ListItem>
 			<PlayerInjuryHistory player={props.player} />
+			<KillPlayer player={props.player} />
 
 			{/* Player Misc */}
 			<ListItem className={classes.listItem}>

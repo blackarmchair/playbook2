@@ -154,6 +154,26 @@ function rosterReducer(state, action) {
 				value: rosterValuation(newState),
 			};
 		}
+		case 'ROSTER/KILL_PLAYER': {
+			const newState = {
+				...state,
+				players: state.players.filter(
+					(player) => player.uuid !== action.player.uuid
+				),
+			};
+			save({
+				...newState,
+				value: rosterValuation(newState),
+			});
+			buryPlayer({
+				...action.player,
+				rosterId: newState.uuid,
+			});
+			return {
+				...newState,
+				value: rosterValuation(newState),
+			};
+		}
 		case 'ROSTER/ADD_ITEM': {
 			let newTreasury = 0;
 			if (state.leagueHasStarted && action.item.label === 'Dedicated Fans') {
@@ -431,6 +451,13 @@ function removePlayer(dispatch, player) {
 		dispatch({ type: 'ROSTER/ERROR' });
 	}
 }
+function killPlayer(dispatch, player) {
+	try {
+		dispatch({ type: 'ROSTER/KILL_PLAYER', player });
+	} catch {
+		dispatch({ type: 'ROSTER/ERROR' });
+	}
+}
 function updatePlayer(dispatch, player, advance) {
 	try {
 		dispatch({ type: 'ROSTER/UPDATE_PLAYER', player, advance });
@@ -541,6 +568,15 @@ function save(roster) {
 			console.error(err);
 		});
 }
+function buryPlayer(player) {
+	database
+		.collection('graveyard')
+		.doc(player.uuid)
+		.set({ ...player, deathDate: Date.now() }, { merge: true })
+		.catch((err) => {
+			console.error(err);
+		});
+}
 async function getRosters() {
 	// Assess current cache
 	let rosters = LOCAL.read('rosters') || [];
@@ -595,6 +631,7 @@ export {
 	setTeamLabel,
 	addPlayer,
 	removePlayer,
+	killPlayer,
 	updatePlayer,
 	setPlayerName,
 	setPlayerNumber,

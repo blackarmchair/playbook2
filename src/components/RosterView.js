@@ -52,6 +52,7 @@ const RosterView = (props) => {
 		value,
 		treasury,
 		record,
+		leagueHasStarted,
 	} = useRosterState();
 
 	const dedicatedFans = !!items
@@ -116,7 +117,9 @@ const RosterView = (props) => {
 			<TableCell className={classes.tableCell}>{item.qty}x</TableCell>
 			<TableCell className={classes.tableCell}>{item.label}</TableCell>
 			<TableCell className={classes.tableCell}>
-				{Formatters.parseNumber(item.value * item.qty)}g
+				{leagueHasStarted && item.label === 'Dedicated Fans'
+					? ''
+					: `${Formatters.parseNumber(item.value * item.qty)}g`}
 			</TableCell>
 		</TableRow>
 	);
