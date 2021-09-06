@@ -1,114 +1,72 @@
-import React from "react";
+import React from 'react';
 import {
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
-    FormGroup,
-    FormControlLabel,
-    TextField,
-    Switch,
-} from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import EditModal from "../Modals/EditModal";
+	ListItem,
+	ListItemText,
+	ListItemSecondaryAction,
+	IconButton,
+	Switch,
+} from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
-    useRosterDispatch,
-    updatePlayerInjuryStatus,
-} from "../../contexts/roster";
+	useRosterDispatch,
+	updatePlayerInjuryStatus,
+} from '../../contexts/roster';
 
 const PlayerInjuryHistory = ({ player }) => {
-    // Player Injury Status
-    const [nigglingInjuries, setNigglingInjuries] = React.useState(
-        parseInt(player.nigglingInjuries) || 0
-    );
-    const [missNextGame, setMissNextGame] = React.useState(
-        Boolean(player.missNextGame)
-    );
+	// Player Injury Status
+	const [nigglingInjuries, setNigglingInjuries] = React.useState(
+		parseInt(player.nigglingInjuries) || 0
+	);
+	const addNigglingInjury = (prevState) => {
+		const c = window.confirm('Add a niggling injury?');
+		console.log(nigglingInjuries);
+		if (c) {
+			const newNIValue = nigglingInjuries + 1;
+			setNigglingInjuries(newNIValue);
+			updatePlayerInjuryStatus(dispatch, player, newNIValue, missNextGame);
+		}
+	};
 
-    // Handle Modal State
-    const [editModal, setEditModal] = React.useState(false);
-    const handleToggle = () => {
-        setEditModal(!editModal);
-    };
+	const [missNextGame, setMissNextGame] = React.useState(
+		Boolean(player.missNextGame)
+	);
+	const handleInjuryToggle = () => {
+		setMissNextGame(!missNextGame);
+		updatePlayerInjuryStatus(dispatch, player, nigglingInjuries, !missNextGame);
+	};
 
-    const dispatch = useRosterDispatch();
-    const handleUpdate = () => {
-        handleToggle();
-        updatePlayerInjuryStatus(
-            dispatch,
-            player,
-            nigglingInjuries,
-            missNextGame
-        );
-    };
+	const dispatch = useRosterDispatch();
 
-    return (
-        <>
-            <EditModal
-                open={editModal}
-                title="Change Player Name"
-                message="Enter a name for the player."
-                action="Save"
-                onConfirm={handleUpdate}
-                onCancel={handleToggle}
-            >
-                <>
-                    <FormGroup row>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={missNextGame}
-                                    onChange={(event) =>
-                                        setMissNextGame(event.target.checked)
-                                    }
-                                />
-                            }
-                            label="Miss Next Game"
-                        />
-                    </FormGroup>
-                    <TextField
-                        variant="filled"
-                        label="Niggling Injuries"
-                        type="number"
-                        onChange={(event) =>
-                            setNigglingInjuries(event.target.value)
-                        }
-                    />
-                </>
-            </EditModal>
-            <ListItem button onClick={handleToggle}>
-                <ListItemText
-                    primary={
-                        player.hasOwnProperty("missNextGame") &&
-                        player.missNextGame
-                            ? "Injured"
-                            : "Healthy"
-                    }
-                    secondary="Injury Status"
-                />
-                <ListItemSecondaryAction>
-                    <IconButton onClick={handleToggle}>
-                        <EditIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button onClick={handleToggle}>
-                <ListItemText
-                    primary={
-                        player.hasOwnProperty("nigglingInjuries")
-                            ? player.nigglingInjuries
-                            : 0
-                    }
-                    secondary="Niggling Injuries"
-                />
-                <ListItemSecondaryAction>
-                    <IconButton onClick={handleToggle}>
-                        <EditIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
-        </>
-    );
+	const playerIsInjured =
+		player.hasOwnProperty('missNextGame') && player.missNextGame
+			? 'Injured'
+			: 'Healthy';
+
+	return (
+		<>
+			<ListItem button>
+				<ListItemText primary={playerIsInjured} secondary="Injury Status" />
+				<ListItemSecondaryAction>
+					<Switch checked={!missNextGame} onChange={handleInjuryToggle} />
+				</ListItemSecondaryAction>
+			</ListItem>
+			<ListItem button>
+				<ListItemText
+					primary={
+						player.hasOwnProperty('nigglingInjuries')
+							? player.nigglingInjuries
+							: 0
+					}
+					secondary="Niggling Injuries"
+				/>
+				<ListItemSecondaryAction>
+					<IconButton color="primary" onClick={addNigglingInjury}>
+						<AddCircleIcon />
+					</IconButton>
+				</ListItemSecondaryAction>
+			</ListItem>
+		</>
+	);
 };
 
 export default PlayerInjuryHistory;

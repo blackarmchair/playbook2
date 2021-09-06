@@ -95,7 +95,7 @@ const RosterView = (props) => {
 				{player.AV}+
 			</TableCell>
 			<TableCell className={classes.tableCell}>
-				{player.skills.split(',').join(', ')}
+				{player.skills.split(',').join(', ').replace(/^,/, '')}
 			</TableCell>
 			<TableCell className={classes.tableCell}>
 				{player.primary.split(',').join(', ')}

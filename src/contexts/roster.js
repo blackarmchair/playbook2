@@ -321,6 +321,27 @@ function rosterReducer(state, action) {
 				value: rosterValuation(newState),
 			};
 		}
+		case 'ROSTER/ADD_LASTING_INJURY': {
+			const newState = {
+				...state,
+				players: state.players.map((player) => {
+					if (player.uuid === action.player.uuid) {
+						const updatedPlayer = {
+							...player,
+							lastingInjuries: !!action.player.lastingInjuries
+								? [...action.player.lastingInjuries, action.characteristic]
+								: [action.characteristic],
+						};
+						updatedPlayer[action.characteristic] =
+							updatedPlayer[action.characteristic] - 1;
+						return updatedPlayer;
+					}
+					return player;
+				}),
+			};
+			save({ ...newState });
+			return { ...newState };
+		}
 		case 'ROSTER/ADD_WIN': {
 			const newState = {
 				...state,
@@ -486,6 +507,13 @@ function updatePlayerInjuryStatus(dispatch, player, ni, mng) {
 		dispatch({ type: 'ROSTER/ERROR' });
 	}
 }
+function addLastingInjury(dispatch, characteristic, player) {
+	try {
+		dispatch({ type: 'ROSTER/ADD_LASTING_INJURY', characteristic, player });
+	} catch {
+		dispatch({ type: 'ROSTER/ERROR' });
+	}
+}
 function updatePlayerStats(dispatch, player, stat) {
 	try {
 		dispatch({ type: 'ROSTER/UPDATE_PLAYER_STAT', player, stat });
@@ -636,6 +664,7 @@ export {
 	setPlayerName,
 	setPlayerNumber,
 	updatePlayerInjuryStatus,
+	addLastingInjury,
 	updatePlayerStats,
 	addWin,
 	addLoss,

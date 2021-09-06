@@ -20,8 +20,9 @@ import JerseyNumberSelect from '../ListItems/JerseyNumberSelect';
 import SkillSelect from '../ListItems/SkillSelect';
 import PlayerInjuryHistory from '../ListItems/PlayerInjuryHistory';
 import Stats from '../ListItems/spp';
-import FirePlayer from '../ListItems/FirePlayer';
 import KillPlayer from '../ListItems/KillPlayer';
+import AddLastingInjury from '../ListItems/AddLastingInjury';
+import FirePlayer from '../ListItems/FirePlayer';
 
 const useStyles = makeStyles((theme) => ({
 	headline: { flexGrow: 1 },
@@ -129,6 +130,7 @@ const EditPlayer = (props) => {
 				<ListItemText primary="Injury History" />
 			</ListItem>
 			<PlayerInjuryHistory player={props.player} />
+			<AddLastingInjury player={props.player} />
 			<KillPlayer player={props.player} />
 
 			{/* Player Misc */}
