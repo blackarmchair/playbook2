@@ -150,15 +150,6 @@ const RosterItemCatagories = () => {
 				<ListItem className={classes.listItem}>
 					<ListItemText primary="Staff, Fans, &amp; Coaching" />
 					<ListItemSecondaryAction className={classes.secondaryActions}>
-						<Typography variant="body1">
-							{Formatters.parseNumber(
-								Object.keys(items).reduce((acc, key) => {
-									const item = items[key];
-									return acc + item.value * item.qty;
-								}, 0)
-							)}
-							g
-						</Typography>
 						<IconButton
 							onClick={() => toggleDrawer(CATEGORIES.ITEM)}
 							disabled={!Boolean(teamId)}

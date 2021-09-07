@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import {
 	Container,
 	Paper,
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RosterView = (props) => {
 	const classes = useStyles();
+	const router = useRouter();
 
 	const {
 		initialized,
@@ -59,10 +61,14 @@ const RosterView = (props) => {
 		? items.find((item) => item.label === 'Dedicated Fans').qty + 1
 		: 1;
 
+	const handleNavigation = (playerId) => {
+		router.push(`/player/${playerId}`);
+	};
+
 	if (!initialized) return null;
 
 	const Player = ({ player }) => (
-		<TableRow>
+		<TableRow onClick={() => handleNavigation(player.uuid)}>
 			<TableCell align="right" className={classes.tableCell}>
 				#{player.number || '00'}
 			</TableCell>
