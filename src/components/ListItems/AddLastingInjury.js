@@ -12,7 +12,10 @@ const AddLastingInjury = ({ player }) => {
 	const dispatch = useRosterDispatch();
 
 	const handleAddInjury = (characteristic) => {
-		addLastingInjury(dispatch, characteristic, player);
+		const confirm = window.confirm('Add lasting injury?');
+		if (confirm) {
+			addLastingInjury(dispatch, characteristic, player);
+		}
 	};
 
 	const injuries = {
