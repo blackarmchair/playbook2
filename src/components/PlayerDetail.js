@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlayerDetail = (props) => {
+	console.log(props);
 	const classes = useStyles();
 	const {
 		MA,
@@ -80,8 +81,8 @@ const PlayerDetail = (props) => {
 		<List>
 			<ListItem className={classes.topItem}>
 				<ListItemText
-					primary={`#${number} ${name}`}
-					secondary={`${playerLevel.label} ${position}`}
+					primary={`#${number || '00'} ${name || ''}`}
+					secondary={`${playerLevel?.label || 'Novice'} ${position}`}
 					classes={{ secondary: classes.secondaryContrast }}
 				/>
 				<ListItemSecondaryAction>

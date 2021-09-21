@@ -20,6 +20,7 @@ import { useTeamDispatch, fetchTeams } from '../contexts/team';
 import { useUserDispatch, getUserData, getUserList } from '../contexts/user';
 import { getRosters } from '../contexts/roster';
 import { getInitials } from '../helpers/formatters';
+import determineStandings from '../helpers/standings';
 import LOCAL from '../helpers/local';
 
 const useStyles = makeStyles((theme) => ({
@@ -115,7 +116,7 @@ function RostersPage() {
 				<Container classes={{ root: classes.innerContainer }}>
 					<List>
 						{userLoaded &&
-							rosters.map((roster) => (
+							determineStandings(rosters).map((roster) => (
 								<div key={roster.uuid}>
 									<ListItem>
 										<ListItemAvatar>
@@ -139,7 +140,10 @@ function RostersPage() {
 												<Typography variant="caption">
 													{`${roster.teamName} Team`}
 													<br />
-													{Formatters.parseNumber(roster.value)}g
+													{Formatters.parseNumber(roster.value)}g <br /> (
+													{roster.record.win}/{roster.record.loss}/
+													{roster.record.draw}) | LP: {roster.leaguePoints} |
+													TD: {roster.touchdowns} | CAS: {roster.casualties}
 												</Typography>
 											}
 											onClick={() => handleNav(roster)}
