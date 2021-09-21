@@ -571,7 +571,13 @@ function updateTreasury(dispatch, treasury) {
 function rosterValuation(roster) {
 	const playerValue = Array.isArray(roster.players)
 		? roster.players.reduce((acc, player) => {
-				if (roster.lowCostLinemen && player.max >= 12) return acc;
+				if (roster.lowCostLinemen && player.max >= 12) {
+					const playerAdvancementValue = player.advancements.length
+						? player.advancements.reduce((acc, cur) => cur.cost + acc, 0)
+						: 0;
+					console.log(playerAdvancementValue);
+					return acc + playerAdvancementValue;
+				}
 				if (player.missNextGame) return acc;
 				return player.cost + acc;
 		  }, 0)
