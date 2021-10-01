@@ -175,9 +175,12 @@ function rosterReducer(state, action) {
 			};
 		}
 		case 'ROSTER/ADD_ITEM': {
-			let newTreasury = 0;
+			let newTreasury = parseInt(state.treasury) - parseInt(action.item.value);
 			if (state.leagueHasStarted && action.item.label === 'Dedicated Fans') {
 				newTreasury = parseInt(state.treasury);
+			} else if (state.leaguePoints && action.item.label === 'Re-Rolls') {
+				newTreasury =
+					parseInt(state.treasury) - parseInt(action.item.value) * 2;
 			} else {
 				newTreasury = parseInt(state.treasury) - parseInt(action.item.value);
 			}
@@ -239,22 +242,12 @@ function rosterReducer(state, action) {
 			};
 		}
 		case 'ROSTER/UPDATE_PLAYER': {
-			const players = state.players.map(async (player) => {
+			const players = state.players.map((player) => {
 				const { advance } = action;
-
-				let baseCost = 0;
-				if (player.hasOwnProperty('baseCost')) {
-					baseCost = player.baseCost;
-				} else {
-					baseCost = await getPlayerBaseCost(player);
-				}
-				console.log(baseCost);
-
 				if (player.uuid === action.player.uuid) {
-					return UpdatePlayer({ ...player, baseCost }, advance);
+					return UpdatePlayer(player, advance);
 				}
-
-				return { ...player, baseCost };
+				return player;
 			});
 
 			const newState = { ...state, players };
