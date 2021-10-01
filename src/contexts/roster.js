@@ -367,6 +367,10 @@ function rosterReducer(state, action) {
 					...state.record,
 					loss: parseInt(state.record.loss) + 1,
 				},
+				players: state.players.map((player) => ({
+					...player,
+					missNextGame: false,
+				})),
 			};
 			save(newState);
 			return newState;
@@ -379,6 +383,10 @@ function rosterReducer(state, action) {
 					draw: parseInt(state.record.draw) + 1,
 				},
 				leaguePoints: parseInt(state.leaguePoints) + 1,
+				players: state.players.map((player) => ({
+					...player,
+					missNextGame: false,
+				})),
 			};
 			save(newState);
 			return newState;
@@ -657,20 +665,6 @@ async function getRosters() {
 	LOCAL.set('lastFetchedRostersAt', Date.now());
 
 	return rosters;
-}
-async function getPlayerBaseCost({ position, team }) {
-	const playerSnapshot = await database
-		.collection('players')
-		.where('position', '==', position)
-		.where('team', '==', team)
-		.get()
-		.then();
-	const player = playerSnapshot.docs.map((doc) => ({
-		id: doc.id,
-		...doc.data(),
-	}));
-
-	return player.length ? player[0].cost : -1;
 }
 
 export {
