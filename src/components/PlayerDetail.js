@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlayerDetail = (props) => {
-	console.log(props);
 	const classes = useStyles();
 	const {
 		MA,

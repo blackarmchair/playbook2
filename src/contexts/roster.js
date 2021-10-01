@@ -239,16 +239,25 @@ function rosterReducer(state, action) {
 			};
 		}
 		case 'ROSTER/UPDATE_PLAYER': {
-			const newState = {
-				...state,
-				players: state.players.map((player) => {
-					const { advance } = action;
-					if (player.uuid === action.player.uuid) {
-						return UpdatePlayer(player, advance);
-					}
-					return player;
-				}),
-			};
+			const players = state.players.map(async (player) => {
+				const { advance } = action;
+
+				let baseCost = 0;
+				if (player.hasOwnProperty('baseCost')) {
+					baseCost = player.baseCost;
+				} else {
+					baseCost = await getPlayerBaseCost(player);
+				}
+				console.log(baseCost);
+
+				if (player.uuid === action.player.uuid) {
+					return UpdatePlayer({ ...player, baseCost }, advance);
+				}
+
+				return { ...player, baseCost };
+			});
+
+			const newState = { ...state, players };
 			save({
 				...newState,
 				value: rosterValuation(newState),
@@ -350,6 +359,10 @@ function rosterReducer(state, action) {
 					win: parseInt(state.record.win) + 1,
 				},
 				leaguePoints: parseInt(state.leaguePoints) + 3,
+				players: state.players.map((player) => ({
+					...player,
+					missNextGame: false,
+				})),
 			};
 			save(newState);
 			return newState;
@@ -575,7 +588,6 @@ function rosterValuation(roster) {
 					const playerAdvancementValue = player.advancements.length
 						? player.advancements.reduce((acc, cur) => cur.cost + acc, 0)
 						: 0;
-					console.log(playerAdvancementValue);
 					return acc + playerAdvancementValue;
 				}
 				if (player.missNextGame) return acc;
@@ -652,6 +664,20 @@ async function getRosters() {
 	LOCAL.set('lastFetchedRostersAt', Date.now());
 
 	return rosters;
+}
+async function getPlayerBaseCost({ position, team }) {
+	const playerSnapshot = await database
+		.collection('players')
+		.where('position', '==', position)
+		.where('team', '==', team)
+		.get()
+		.then();
+	const player = playerSnapshot.docs.map((doc) => ({
+		id: doc.id,
+		...doc.data(),
+	}));
+
+	return player.length ? player[0].cost : -1;
 }
 
 export {
