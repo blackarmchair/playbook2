@@ -18,6 +18,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AirlineSeatFlatIcon from '@material-ui/icons/AirlineSeatFlat';
 import LOCAL from '../helpers/local';
 
 const useStyles = makeStyles((theme) => ({
@@ -106,6 +107,12 @@ const TopBar = () => {
 							<DateRangeIcon />
 						</ListItemIcon>
 						<ListItemText primary="Schedule" />
+					</ListItem>
+					<ListItem button onClick={() => handleNavigation('/graveyard')}>
+						<ListItemIcon>
+							<AirlineSeatFlatIcon />
+						</ListItemIcon>
+						<ListItemText primary="Graveyard" />
 					</ListItem>
 					<ListItem button onClick={() => handleLogout()}>
 						<ListItemIcon>

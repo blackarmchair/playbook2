@@ -13,6 +13,7 @@ const initialState = {
 		cheerleaders: { qty: 0, value: 10000, label: 'Cheerleaders' },
 		dedicatedFans: { qty: 0, value: 10000, label: 'Dedicated Fans' },
 		rerolls: { qty: 0, value: 0, label: 'Re-Rolls' },
+		mascots: { qty: 0, value: 30000, label: 'Team Mascots' },
 	},
 	players: [],
 	value: 0,
@@ -179,6 +180,9 @@ function rosterReducer(state, action) {
 			if (state.leagueHasStarted && action.item.label === 'Dedicated Fans') {
 				newTreasury = parseInt(state.treasury);
 			} else if (state.leaguePoints && action.item.label === 'Re-Rolls') {
+				newTreasury =
+					parseInt(state.treasury) - parseInt(action.item.value) * 2;
+			} else if (state.leaguePoints && action.item.label === 'Team Mascots') {
 				newTreasury =
 					parseInt(state.treasury) - parseInt(action.item.value) * 2;
 			} else {

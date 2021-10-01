@@ -10,3 +10,27 @@ export function getInitials(fname, lname) {
 		return '';
 	}
 }
+
+export function unixStampToString(stamp) {
+	const d = new Date(stamp);
+	const months = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec',
+	];
+
+	const year = d.getFullYear();
+	const month = months[d.getMonth()];
+	const date = d.getDate();
+
+	return `${month} ${date}, ${year}`;
+}
