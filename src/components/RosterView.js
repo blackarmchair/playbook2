@@ -217,10 +217,11 @@ const RosterView = (props) => {
 			<Divider className={classes.divider} />
 			<Typography variant="h6">Miscellaneous Items</Typography>
 			<ItemDisplayTable>
-				{Array.isArray(items) &&
-					items
-						.filter((item) => item.qty)
-						.map((item) => <Item item={item} key={item.label} />)}
+				{Object.values(items)
+					.filter((item) => item.qty)
+					.map((item) => (
+						<Item item={item} key={item.label} />
+					))}
 			</ItemDisplayTable>
 		</Container>
 	);
