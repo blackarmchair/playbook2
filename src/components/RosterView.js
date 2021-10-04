@@ -58,7 +58,8 @@ const RosterView = (props) => {
 	} = useRosterState();
 
 	const dedicatedFans = !!items
-		? items.find((item) => item.label === 'Dedicated Fans').qty + 1
+		? Object.values(items).find((item) => item.label === 'Dedicated Fans').qty +
+		  1
 		: 1;
 
 	const handleNavigation = (playerId) => {
