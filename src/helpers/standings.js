@@ -1,12 +1,28 @@
+import LOCAL from './local';
+
 export default function determineStandings(rosters) {
+	const deadPlayers = LOCAL.read('deadPlayers');
+
 	const parsedRosters = rosters.map((roster) => {
+		const deadPlayerTDs =
+			Array.isArray(deadPlayers) && deadPlayers.length
+				? deadPlayers
+						.filter((player) => player.rosterId === roster.id)
+						.reduce((acc, cur) => cur.stats.TD + acc, 0)
+				: 0;
+		const deadPlayerCAS =
+			Array.isArray(deadPlayers) && deadPlayers.length
+				? deadPlayers
+						.filter((player) => player.rosterId === roster.id)
+						.reduce((acc, cur) => cur.stats.CAS + acc, 0)
+				: 0;
 		const touchdowns = roster.players.reduce(
 			(acc, cur) => cur.stats.TD + acc,
-			0
+			deadPlayerTDs
 		);
 		const casualties = roster.players.reduce(
 			(acc, cur) => cur.stats.CAS + acc,
-			0
+			deadPlayerCAS
 		);
 		return { ...roster, touchdowns, casualties };
 	});

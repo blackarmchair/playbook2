@@ -116,12 +116,54 @@ async function fetchTeams(dispatch) {
 		LOCAL.set('players', players);
 		LOCAL.set('lastFetchedPlayersAt', Date.now());
 
+		// Fetch Dead Players
+		let deadPlayers = LOCAL.read('deadPlayers') || [];
+		let lastFetchedDeadPlayersAt = LOCAL.read('lastFetchedDeadPlayersAt') || -1;
+
+		// Find dead players with updates
+		if (Array.isArray(deadPlayers) && deadPlayers.length) {
+			const updatedDeadPlayersSnapshot = await database
+				.collection('graveyard')
+				.where('lastUpdatedAt', '>', lastFetchedDeadPlayersAt)
+				.get()
+				.then();
+			const updatedDeadPlayers = updatedDeadPlayersSnapshot.docs.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
+			updatedDeadPlayers.forEach((deadPlayer) => {
+				const oldPlayerIdx = deadPlayers.findIndex(
+					(player) => player.id === deadPlayers.id
+				);
+				deadPlayers[oldPlayerIdx] = deadPlayer;
+			});
+		}
+
+		// Fetch ALL Dead Players
+		else {
+			const allDeadPlayersSnapshot = await database
+				.collection('graveyard')
+				.get()
+				.then();
+			deadPlayers = allDeadPlayersSnapshot.docs.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
+		}
+
+		// Update localStorage
+		LOCAL.set('deadPlayers', deadPlayers);
+		LOCAL.set('lastFetchedDeadPlayersAt', Date.now());
+
 		dispatch({
 			type: 'TEAM/SET_TEAMS',
 			teams: teams.map((team) => ({
 				...team,
 				players: players.filter(
 					(player) => player.team === `${team.name} Teams`
+				),
+				deadPlayers: deadPlayers.filter(
+					(player) => player.rosterId === team.rosterId
 				),
 			})),
 		});
