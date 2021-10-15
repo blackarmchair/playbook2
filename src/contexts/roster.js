@@ -101,6 +101,7 @@ function rosterReducer(state, action) {
 						...state.players,
 						{
 							...action.player,
+							baseCost: action.player.cost,
 							id: UUID(),
 							SPP: 0,
 							level: -1,
